@@ -2,7 +2,10 @@
   "name": "openmct",
   "version": "1.0.0-snapshot",
   "description": "The Open MCT core platform",
-  "dependencies": {},
+  "dependencies": {
+    "@ifrunistuttgart/node-mavlink": "^0.1.2",
+    "serialport": "^9.0.1"
+  },
   "devDependencies": {
     "angular": ">=1.8.0",
     "angular-route": "1.4.14",

@@ -1,0 +1,3 @@
+[submodule "src/plugins/mavlink"]
+	path = src/plugins/mavlink
+	url = https://github.com/jackbeagley/mavlink-openmct.git

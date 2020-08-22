@@ -22,6 +22,7 @@ const webpackConfig = {
     mode: devMode ? 'development' : 'production',
     entry: {
         openmct: './openmct.js',
+        mavlinkTelemetry: './src/plugins/mavlink/mavlink-telemetry.js',
         espressoTheme: './src/plugins/themes/espresso-theme.scss',
         snowTheme: './src/plugins/themes/snow-theme.scss',
         maelstromTheme: './src/plugins/themes/maelstrom-theme.scss'
@@ -69,6 +70,10 @@ const webpackConfig = {
                 from: 'src/images/favicons',
                 to: 'favicons'
             },
+            /*{
+                from: 'src/plugins/mavlink/telemetry-messages.json',
+                to : 'dist'
+            },*/
             {
                 from: './index.html',
                 transform: function (content) {
