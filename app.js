@@ -14,6 +14,8 @@ const app = express();
 const fs = require('fs');
 const request = require('request');
 
+const mavlinkServer = require('./src/plugins/mavlink/server/mavlink-server.js')
+
 // Defaults
 options.port = options.port || options.p || 8080;
 options.host = options.host || 'localhost';
@@ -71,6 +73,8 @@ app.use(require('webpack-hot-middleware')(
 app.get('/', function (req, res) {
     fs.createReadStream('index.html').pipe(res);
 });
+
+mavlinkServer.install(app);
 
 // Finally, open the HTTP server and log the instance to the console
 app.listen(options.port, options.host, function() {
