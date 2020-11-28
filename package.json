@@ -5,6 +5,7 @@
   "dependencies": {
     "@ifrunistuttgart/node-mavlink": "^0.1.2",
     "express-ws": "^4.0.0",
+    "mavlink-openmct": "^1.0.1",
     "serialport": "^9.0.1"
   },
   "devDependencies": {

@@ -14,7 +14,7 @@ const app = express();
 const fs = require('fs');
 const request = require('request');
 
-const mavlinkServer = require('./src/plugins/mavlink/server/mavlink-server.js')
+const mavlinkServer = require('mavlink-openmct/server/mavlink-server.js')
 
 // Defaults
 options.port = options.port || options.p || 8080;

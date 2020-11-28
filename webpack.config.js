@@ -22,7 +22,7 @@ const webpackConfig = {
     mode: devMode ? 'development' : 'production',
     entry: {
         openmct: './openmct.js',
-        mavlinkTelemetry: './src/plugins/mavlink/mavlink-telemetry.js',
+        mavlinkTelemetry: './node_modules/mavlink-openmct/mavlink-telemetry.js',
         espressoTheme: './src/plugins/themes/espresso-theme.scss',
         snowTheme: './src/plugins/themes/snow-theme.scss',
         maelstromTheme: './src/plugins/themes/maelstrom-theme.scss'
