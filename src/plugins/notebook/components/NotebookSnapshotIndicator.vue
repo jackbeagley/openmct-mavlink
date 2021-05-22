@@ -1,5 +1,5 @@
 <template>
-<div class="c-indicator c-indicator--clickable icon-notebook"
+<div class="c-indicator c-indicator--clickable icon-camera"
      :class="[
          { 's-status-off': snapshotCount === 0 },
          { 's-status-on': snapshotCount > 0 },
@@ -69,13 +69,13 @@ export default {
             const divElement = document.querySelector('.l-shell__drawer div');
 
             this.component = new Vue({
-                provide: {
-                    openmct,
-                    snapshotContainer
-                },
                 el: divElement,
                 components: {
                     SnapshotContainerComponent
+                },
+                provide: {
+                    openmct,
+                    snapshotContainer
                 },
                 data() {
                     return {

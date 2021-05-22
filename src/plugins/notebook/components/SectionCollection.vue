@@ -22,10 +22,10 @@ import { getDefaultNotebook } from '../utils/notebook-storage';
 import sectionComponent from './SectionComponent.vue';
 
 export default {
-    inject: ['openmct'],
     components: {
         sectionComponent
     },
+    inject: ['openmct'],
     props: {
         defaultSectionId: {
             type: String,
@@ -52,10 +52,6 @@ export default {
                 return '';
             }
         }
-    },
-    data() {
-        return {
-        };
     },
     methods: {
         deleteSection(id) {

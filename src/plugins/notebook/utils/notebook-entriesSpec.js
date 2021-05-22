@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Open MCT, Copyright (c) 2014-2020, United States Government
+ * Open MCT, Copyright (c) 2014-2021, United States Government
  * as represented by the Administrator of the National Aeronautics and Space
  * Administration. All rights reserved.
  *
@@ -20,16 +20,9 @@
  * at runtime from the About dialog for additional information.
  *****************************************************************************/
 import * as NotebookEntries from './notebook-entries';
-import { createOpenMct, spyOnBuiltins, resetApplicationState } from 'utils/testing';
+import { createOpenMct, resetApplicationState } from 'utils/testing';
 
 const notebookStorage = {
-    domainObject: {
-        name: 'notebook',
-        identifier: {
-            namespace: '',
-            key: 'test-notebook'
-        }
-    },
     notebookMeta: {
         name: 'notebook',
         identifier: {
@@ -116,12 +109,31 @@ const selectedPage = {
 };
 
 let openmct;
+let mockIdentifierService;
 
 describe('Notebook Entries:', () => {
     beforeEach(done => {
         openmct = createOpenMct();
+        openmct.$injector = jasmine.createSpyObj('$injector', ['get']);
+        mockIdentifierService = jasmine.createSpyObj(
+            'identifierService',
+            ['parse']
+        );
+        mockIdentifierService.parse.and.returnValue({
+            getSpace: () => {
+                return '';
+            }
+        });
+
+        openmct.$injector.get.and.returnValue(mockIdentifierService);
+        openmct.types.addType('notebook', {
+            creatable: true
+        });
+        openmct.objects.addProvider('', jasmine.createSpyObj('mockNotebookProvider', [
+            'create',
+            'update'
+        ]));
         window.localStorage.setItem('notebook-storage', null);
-        spyOnBuiltins(['mutate'], openmct.objects);
 
         done();
     });
@@ -137,24 +149,16 @@ describe('Notebook Entries:', () => {
         expect(entries.length).toEqual(0);
     });
 
-    it('addNotebookEntry mutates object', () => {
+    it('addNotebookEntry adds entry', (done) => {
+        const unlisten = openmct.objects.observe(notebookDomainObject, '*', (object) => {
+            const entries = NotebookEntries.getNotebookEntries(notebookDomainObject, selectedSection, selectedPage);
+
+            expect(entries.length).toEqual(1);
+            done();
+            unlisten();
+        });
+
         NotebookEntries.addNotebookEntry(openmct, notebookDomainObject, notebookStorage);
-
-        expect(openmct.objects.mutate).toHaveBeenCalled();
-    });
-
-    it('addNotebookEntry adds entry', () => {
-        NotebookEntries.addNotebookEntry(openmct, notebookDomainObject, notebookStorage);
-        const entries = NotebookEntries.getNotebookEntries(notebookDomainObject, selectedSection, selectedPage);
-
-        expect(entries.length).toEqual(1);
-    });
-
-    it('getEntryPosById returns valid position', () => {
-        const entryId = NotebookEntries.addNotebookEntry(openmct, notebookDomainObject, notebookStorage);
-        const position = NotebookEntries.getEntryPosById(entryId, notebookDomainObject, selectedSection, selectedPage);
-
-        expect(position).toEqual(0);
     });
 
     it('getEntryPosById returns valid position', () => {
@@ -174,22 +178,13 @@ describe('Notebook Entries:', () => {
         expect(success).toBe(true);
     });
 
-    it('deleteNotebookEntries mutates object', () => {
-        openmct.objects.mutate.calls.reset();
-
-        NotebookEntries.addNotebookEntry(openmct, notebookDomainObject, notebookStorage);
-        NotebookEntries.deleteNotebookEntries(openmct, notebookDomainObject, selectedSection, selectedPage);
-
-        expect(openmct.objects.mutate).toHaveBeenCalledTimes(2);
-    });
-
-    it('deleteNotebookEntries deletes correct entry', () => {
+    it('deleteNotebookEntries deletes correct page entries', () => {
         NotebookEntries.addNotebookEntry(openmct, notebookDomainObject, notebookStorage);
         NotebookEntries.addNotebookEntry(openmct, notebookDomainObject, notebookStorage);
 
         NotebookEntries.deleteNotebookEntries(openmct, notebookDomainObject, selectedSection, selectedPage);
         const afterEntries = NotebookEntries.getNotebookEntries(notebookDomainObject, selectedSection, selectedPage);
 
-        expect(afterEntries).toEqual(null);
+        expect(afterEntries).toEqual(undefined);
     });
 });

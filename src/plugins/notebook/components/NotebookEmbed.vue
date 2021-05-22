@@ -33,10 +33,10 @@ import SnapshotTemplate from './snapshot-template.html';
 import Vue from 'vue';
 
 export default {
-    inject: ['openmct'],
     components: {
         PopupMenu
     },
+    inject: ['openmct'],
     props: {
         embed: {
             type: Object,
@@ -118,7 +118,7 @@ export default {
             painterroInstance.show(this.embed.snapshot.src);
         },
         changeLocation() {
-            const link = this.embed.historicLink;
+            const hash = this.embed.historicLink;
 
             const bounds = this.openmct.time.bounds();
             const isTimeBoundChanged = this.embed.bounds.start !== bounds.start
@@ -143,7 +143,9 @@ export default {
                 this.openmct.notifications.alert(message);
             }
 
-            window.location.href = link;
+            const relativeHash = hash.slice(hash.indexOf('#'));
+            const url = new URL(relativeHash, `${location.protocol}//${location.host}${location.pathname}`);
+            window.location.hash = url.hash;
         },
         formatTime(unixTime, timeFormat) {
             return Moment.utc(unixTime).format(timeFormat);

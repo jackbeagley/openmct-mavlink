@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Open MCT, Copyright (c) 2014-2020, United States Government
+ * Open MCT, Copyright (c) 2014-2021, United States Government
  * as represented by the Administrator of the National Aeronautics and Space
  * Administration. All rights reserved.
  *
@@ -125,13 +125,12 @@ define([
      * @param topic the topicService.
      */
     GenericSearchProvider.prototype.indexOnMutation = function (topic) {
-        var mutationTopic = topic('mutation'),
-            provider = this;
+        let mutationTopic = topic('mutation');
 
-        mutationTopic.listen(function (mutatedObject) {
-            var editor = mutatedObject.getCapability('editor');
+        mutationTopic.listen(mutatedObject => {
+            let editor = mutatedObject.getCapability('editor');
             if (!editor || !editor.inEditContext()) {
-                provider.index(
+                this.index(
                     mutatedObject.getId(),
                     mutatedObject.getModel()
                 );
@@ -147,10 +146,15 @@ define([
      * @param {String} id to be indexed.
      */
     GenericSearchProvider.prototype.scheduleForIndexing = function (id) {
-        if (!this.indexedIds[id] && !this.pendingIndex[id]) {
-            this.indexedIds[id] = true;
-            this.pendingIndex[id] = true;
-            this.idsToIndex.push(id);
+        const identifier = objectUtils.parseKeyString(id);
+        const objectProvider = this.openmct.objects.getProvider(identifier);
+
+        if (objectProvider === undefined || objectProvider.search === undefined) {
+            if (!this.indexedIds[id] && !this.pendingIndex[id]) {
+                this.indexedIds[id] = true;
+                this.pendingIndex[id] = true;
+                this.idsToIndex.push(id);
+            }
         }
 
         this.keepIndexing();
@@ -262,6 +266,7 @@ define([
                 return {
                     id: hit.item.id,
                     model: hit.item.model,
+                    type: hit.item.type,
                     score: hit.matchCount
                 };
             });

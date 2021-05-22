@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Open MCT, Copyright (c) 2014-2020, United States Government
+ * Open MCT, Copyright (c) 2014-2021, United States Government
  * as represented by the Administrator of the National Aeronautics and Space
  * Administration. All rights reserved.
  *
@@ -33,6 +33,24 @@ export default class LegacyPersistenceAdapter {
 
     listSpaces() {
         return Promise.resolve(Object.keys(this.openmct.objects.providers));
+    }
+
+    createObject(space, key, legacyDomainObject) {
+        let object = utils.toNewFormat(legacyDomainObject, {
+            namespace: space,
+            key: key
+        });
+
+        return this.openmct.objects.save(object);
+    }
+
+    deleteObject(space, key) {
+        const identifier = {
+            namespace: space,
+            key: key
+        };
+
+        return this.openmct.objects.delete(identifier);
     }
 
     updateObject(space, key, legacyDomainObject) {

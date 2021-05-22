@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Open MCT, Copyright (c) 2014-2020, United States Government
+ * Open MCT, Copyright (c) 2014-2021, United States Government
  * as represented by the Administrator of the National Aeronautics and Space
  * Administration. All rights reserved.
  *
@@ -56,8 +56,14 @@ define([
     './URLTimeSettingsSynchronizer/plugin',
     './notificationIndicator/plugin',
     './newFolderAction/plugin',
+    './nonEditableFolder/plugin',
     './persistence/couch/plugin',
     './defaultRootName/plugin',
+    './plan/plugin',
+    './viewDatumAction/plugin',
+    './interceptors/plugin',
+    './performanceIndicator/plugin',
+    './CouchDBSearchFolder/plugin',
     './timeline/plugin'
 ], function (
     _,
@@ -95,8 +101,14 @@ define([
     URLTimeSettingsSynchronizer,
     NotificationIndicator,
     NewFolderAction,
+    NonEditableFolder,
     CouchDBPlugin,
     DefaultRootName,
+    PlanLayout,
+    ViewDatumAction,
+    ObjectInterceptors,
+    PerformanceIndicator,
+    CouchDBSearchFolder,
     Timeline
 ) {
     const bundleMap = {
@@ -163,7 +175,7 @@ define([
 
     plugins.ExampleImagery = ExampleImagery;
     plugins.ImageryPlugin = ImageryPlugin;
-    plugins.Plot = PlotPlugin;
+    plugins.Plot = PlotPlugin.default;
     plugins.TelemetryTable = TelemetryTablePlugin;
 
     plugins.SummaryWidget = SummaryWidget;
@@ -188,8 +200,14 @@ define([
     plugins.URLTimeSettingsSynchronizer = URLTimeSettingsSynchronizer.default;
     plugins.NotificationIndicator = NotificationIndicator.default;
     plugins.NewFolderAction = NewFolderAction.default;
+    plugins.NonEditableFolder = NonEditableFolder.default;
     plugins.ISOTimeFormat = ISOTimeFormat.default;
     plugins.DefaultRootName = DefaultRootName.default;
+    plugins.PlanLayout = PlanLayout.default;
+    plugins.ViewDatumAction = ViewDatumAction.default;
+    plugins.ObjectInterceptors = ObjectInterceptors.default;
+    plugins.PerformanceIndicator = PerformanceIndicator.default;
+    plugins.CouchDBSearchFolder = CouchDBSearchFolder.default;
     plugins.Timeline = Timeline.default;
 
     return plugins;

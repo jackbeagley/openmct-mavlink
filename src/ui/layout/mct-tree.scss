@@ -26,6 +26,10 @@
         overflow: hidden;
         transition: all;
 
+        .c-tree__item-h {
+            width: 100%;
+        }
+
         &__scrollable-children {
             overflow: auto;
         }
@@ -52,6 +56,14 @@
     @include userSelectNone();
     overflow-x: hidden;
     overflow-y: auto;
+
+    .icon-arrow-nav-to-parent {
+        visibility: hidden;
+
+        &.is-enabled {
+            visibility: visible;
+        }
+    }
 
     li {
         position: relative;
@@ -89,6 +101,18 @@
 
             [class*="__name"] {
                 color: $colorItemTreeSelectedFg;
+            }
+        }
+
+        &.is-context-clicked {
+            box-shadow: inset $colorItemTreeSelectedBg 0 0 0 1px;
+        }
+
+        .icon-arrow-nav-to-parent {
+            visibility: hidden;
+
+            &.is-enabled {
+                visibility: visible;
             }
         }
     }
